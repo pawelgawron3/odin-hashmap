@@ -94,4 +94,29 @@ class HashMap {
     }
     return false;
   }
+
+  remove(key) {
+    const hashCode = this.hash(key);
+    let bucket = this._array[hashCode];
+
+    if (!bucket) {
+      return false;
+    }
+
+    let currentNode = bucket;
+
+    if (currentNode.key === key) {
+      this._array[hashCode] = currentNode.nextNode;
+      return true;
+    }
+
+    while (currentNode.nextNode) {
+      if (currentNode.nextNode.key === key) {
+        currentNode.nextNode = currentNode.nextNode.nextNode;
+        return true;
+      }
+      currentNode = currentNode.nextNode;
+    }
+    return false;
+  }
 }
