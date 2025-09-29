@@ -138,4 +138,19 @@ class HashMap {
   clear() {
     this._array = new Array(16);
   }
+
+  keys() {
+    let arrayOfKeys = [];
+    let array = this._array;
+
+    array.forEach((bucket) => {
+      let currentNode = bucket;
+      while (currentNode) {
+        arrayOfKeys.push(currentNode.key);
+        currentNode = currentNode.nextNode;
+      }
+    });
+
+    return arrayOfKeys;
+  }
 }
