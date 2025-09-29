@@ -119,4 +119,19 @@ class HashMap {
     }
     return false;
   }
+
+  length() {
+    let numOfNodes = 0;
+    let array = this._array;
+
+    array.forEach((bucket) => {
+      let currentNode = bucket;
+      while (currentNode) {
+        numOfNodes++;
+        currentNode = currentNode.nextNode;
+      }
+    });
+
+    return numOfNodes;
+  }
 }
