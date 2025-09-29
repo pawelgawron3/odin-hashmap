@@ -138,50 +138,34 @@ class HashMap {
   }
 
   keys() {
-    let arrayOfKeys = [];
-    let array = this._array;
-
-    array.forEach((bucket) => {
-      let currentNode = bucket;
-      while (currentNode) {
-        arrayOfKeys.push(currentNode.key);
-        currentNode = currentNode.nextNode;
-      }
+    return this._collect((node) => {
+      return node.key;
     });
-
-    return arrayOfKeys;
   }
 
   values() {
-    let arrayOfValues = [];
-    let array = this._array;
-
-    array.forEach((bucket) => {
-      let currentNode = bucket;
-      while (currentNode) {
-        arrayOfValues.push(currentNode.value);
-        currentNode = currentNode.nextNode;
-      }
+    return this._collect((node) => {
+      return node.value;
     });
-
-    return arrayOfValues;
   }
 
   entries() {
-    let arrayOfKeyValuePairs = [];
-    let array = this._array;
+    return this._collect((node) => {
+      return [node.key, node.value];
+    });
+  }
 
-    array.forEach((bucket) => {
-      let currentNode = bucket;
+  _collect(cb) {
+    let result = [];
+
+    for (let i = 0; i < this._array.length; i++) {
+      let currentNode = this._array[i];
       while (currentNode) {
-        let innerArray = [];
-        innerArray.push(currentNode.key);
-        innerArray.push(currentNode.value);
-        arrayOfKeyValuePairs.push(innerArray);
+        result.push(cb(currentNode));
         currentNode = currentNode.nextNode;
       }
-    });
+    }
 
-    return arrayOfKeyValuePairs;
+    return result;
   }
 }
