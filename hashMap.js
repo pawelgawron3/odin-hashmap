@@ -134,4 +134,8 @@ class HashMap {
 
     return numOfNodes;
   }
+
+  clear() {
+    this._array = new Array(16);
+  }
 }
