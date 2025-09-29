@@ -169,3 +169,5 @@ class HashMap {
     return result;
   }
 }
+
+export { HashMap };
