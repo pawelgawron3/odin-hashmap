@@ -1,3 +1,5 @@
+import { Node } from "./nodeClass.js";
+
 class HashMap {
   constructor() {
     this._array = new Array(this.capacity);
@@ -21,8 +23,8 @@ class HashMap {
     const hashCode = this.hash(key);
     let bucket = this._array[hashCode];
 
-    let numOfElements = this._array.reduce((acc, val) => {
-      return acc + (val ? 1 : 0);
+    let numOfElements = this._array.reduce((acc, bucket) => {
+      return acc + (bucket ? 1 : 0);
     }, 0);
     if (numOfElements > this.capacity * this.loadFactor) {
       this.capacity *= 2;
@@ -33,11 +35,11 @@ class HashMap {
         let currentNode = oldArray[i];
         while (currentNode) {
           const newHashCode = this.hash(currentNode.key);
-          this._array[newHashCode] = {
-            key: currentNode.key,
-            value: currentNode.value,
-            nextNode: this._array[newHashCode],
-          };
+          this._array[newHashCode] = new Node(
+            currentNode.key,
+            currentNode.value,
+            this._array[newHashCode]
+          );
 
           currentNode = currentNode.nextNode;
         }
@@ -55,14 +57,10 @@ class HashMap {
         }
       }
       let prevHeadNode = bucket;
-      this._array[hashCode] = {
-        key: key,
-        value: value,
-        nextNode: prevHeadNode,
-      };
+      this._array[hashCode] = new Node(key, value, prevHeadNode);
       return;
     }
-    this._array[hashCode] = { key: key, value: value, nextNode: null };
+    this._array[hashCode] = new Node(key, value);
   }
 
   get(key) {
