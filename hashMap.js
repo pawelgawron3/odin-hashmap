@@ -1,4 +1,8 @@
 class HashMap {
+  constructor() {
+    this._array = new Array(this.capacity);
+  }
+
   loadFactor = 0.75;
   capacity = 16;
 
@@ -11,5 +15,68 @@ class HashMap {
     }
 
     return hashCode;
+  }
+
+  set(key, value) {
+    const hashCode = this.hash(key);
+    let bucket = this._array[hashCode];
+
+    let numOfElements = this._array.reduce((acc, val) => {
+      return acc + (val ? 1 : 0);
+    }, 0);
+    if (numOfElements > this.capacity * this.loadFactor) {
+      this.capacity *= 2;
+      const oldArray = this._array;
+      this._array = new Array(this.capacity);
+
+      for (let i = 0; i < oldArray.length; i++) {
+        let currentNode = oldArray[i];
+        while (currentNode) {
+          const newHashCode = this.hash(currentNode.key);
+          this._array[newHashCode] = {
+            key: currentNode.key,
+            value: currentNode.value,
+            nextNode: this._array[newHashCode],
+          };
+
+          currentNode = currentNode.nextNode;
+        }
+      }
+    }
+
+    if (bucket) {
+      let currentNode = bucket;
+      while (currentNode) {
+        if (currentNode.key === key) {
+          currentNode.value = value;
+          return;
+        } else {
+          currentNode = currentNode.nextNode;
+        }
+      }
+      let prevHeadNode = bucket;
+      this._array[hashCode] = {
+        key: key,
+        value: value,
+        nextNode: prevHeadNode,
+      };
+      return;
+    }
+    this._array[hashCode] = { key: key, value: value, nextNode: null };
+  }
+
+  get(key) {
+    const hashCode = this.hash(key);
+    let bucket = this._array[hashCode];
+
+    let currentNode = bucket;
+
+    while (currentNode) {
+      if (currentNode.key === key) {
+        return currentNode.value;
+      }
+      currentNode = currentNode.nextNode;
+    }
+    return null;
   }
 }
