@@ -153,4 +153,19 @@ class HashMap {
 
     return arrayOfKeys;
   }
+
+  values() {
+    let arrayOfValues = [];
+    let array = this._array;
+
+    array.forEach((bucket) => {
+      let currentNode = bucket;
+      while (currentNode) {
+        arrayOfValues.push(currentNode.value);
+        currentNode = currentNode.nextNode;
+      }
+    });
+
+    return arrayOfValues;
+  }
 }
