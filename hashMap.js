@@ -168,4 +168,22 @@ class HashMap {
 
     return arrayOfValues;
   }
+
+  entries() {
+    let arrayOfKeyValuePairs = [];
+    let array = this._array;
+
+    array.forEach((bucket) => {
+      let currentNode = bucket;
+      while (currentNode) {
+        let innerArray = [];
+        innerArray.push(currentNode.key);
+        innerArray.push(currentNode.value);
+        arrayOfKeyValuePairs.push(innerArray);
+        currentNode = currentNode.nextNode;
+      }
+    });
+
+    return arrayOfKeyValuePairs;
+  }
 }
